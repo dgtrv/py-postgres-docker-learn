@@ -1,6 +1,11 @@
 version: "3.8"
 
 services:
+  db_manager:
+    container_name: db_manager
+    build: ./services/db_manager
+    depends_on:
+      - db
   db:
     container_name: postgres
     image: postgres:14.2-alpine
