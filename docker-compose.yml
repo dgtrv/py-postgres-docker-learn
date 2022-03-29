@@ -8,7 +8,6 @@ services:
       - ./.env.dev
     depends_on:
       - db
-    entrypoint: /usr/src/app/entrypoint.sh
   db:
     container_name: postgres
     image: postgres:14.2-alpine
