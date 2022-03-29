@@ -1,9 +1,12 @@
 version: "3.8"
 
 services:
-  db_manager:
-    container_name: db_manager
-    build: ./services/db_manager
+  harrypotter:
+    container_name: harry_potter
+    build: .
+    command: python harrypotter.py
+    volumes:
+      - .:/usr/src/app/
     env_file:
       - ./.env.dev
     depends_on:
