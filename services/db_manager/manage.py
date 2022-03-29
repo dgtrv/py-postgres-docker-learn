@@ -45,7 +45,7 @@ def add_hero(side_id: int, name: str, birthday: datetime, strength: int = 0) -> 
 def add_motto(hero_name: str, motto_txt: str) -> None:
     with Session() as session:
         hero = session.query(Hero).filter(Hero.name == hero_name).first()
-        hero_mottos = session.query(Motto).filter(Motto.hero_id == hero.id)
+        hero_mottos = session.query(Motto).filter(Motto.hero_id == hero.id).all()
         new_motto_id = hero_mottos[-1] + 1
         new_motto = Motto(hero.id, motto_id=new_motto_id, motto=motto_txt)
         session.add(new_motto)
@@ -53,16 +53,16 @@ def add_motto(hero_name: str, motto_txt: str) -> None:
 
 def add_interaction():
     with Session() as session:
-        sides = session.query(Side)
+        sides = session.query(Side).all()
         side_1 = sides[0]
         side_2 = sides[1]
-        heroes_from_side_1 = session.query(Hero).filter(Hero.side_id == side_1.id)
-        heroes_from_side_2 = session.query(Hero).filter(Hero.side_id == side_2.id)
+        heroes_from_side_1 = session.query(Hero).filter(Hero.side_id == side_1.id).all()
+        heroes_from_side_2 = session.query(Hero).filter(Hero.side_id == side_2.id).all()
         hero_1 = heroes_from_side_1[randint(0, len(heroes_from_side_1) - 1)]
         hero_2 = heroes_from_side_2[randint(0, len(heroes_from_side_2) - 1)]
-        hero_1_mottos = session.query(Motto).filter(Motto.hero_id == hero_1.id)
+        hero_1_mottos = session.query(Motto).filter(Motto.hero_id == hero_1.id).all()
         hero_1_random_motto = hero_1_mottos[randint(0, len(hero_1_mottos) - 1)]
-        hero_2_mottos = session.query(Motto).filter(Motto.hero_id == hero_2.id)
+        hero_2_mottos = session.query(Motto).filter(Motto.hero_id == hero_2.id).all()
         hero_2_random_motto = hero_2_mottos[randint(0, len(hero_2_mottos) - 1)]
         winner = randint(0, 2)
         new_interaction = Interaction(
