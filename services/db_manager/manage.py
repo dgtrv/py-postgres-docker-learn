@@ -56,8 +56,8 @@ def add_interaction():
         sides = session.query(Side)
         side_1 = sides[0]
         side_2 = sides[1]
-        heroes_from_side_1 = session.query(Hero).filter(Hero.side_id == side_1.side_id)
-        heroes_from_side_2 = session.query(Hero).filter(Hero.side_id == side_2.side_id)
+        heroes_from_side_1 = session.query(Hero).filter(Hero.side_id == side_1.id)
+        heroes_from_side_2 = session.query(Hero).filter(Hero.side_id == side_2.id)
         hero_1 = heroes_from_side_1[randint(0, len(heroes_from_side_1) - 1)]
         hero_2 = heroes_from_side_2[randint(0, len(heroes_from_side_2) - 1)]
         hero_1_mottos = session.query(Motto).filter(Motto.hero_id == hero_1.id)
