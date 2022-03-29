@@ -1,5 +1,5 @@
 from datetime import datetime
-from .model import Hero, Motto, Side, Interaction, Story, Base, Session, engine
+from model import Hero, Motto, Side, Interaction, Story, Base, Session, engine
 from sys import argv, exit
 from random import randint
 
@@ -69,9 +69,10 @@ def add_interaction():
             hero_1_id=hero_1.id,
             hero_2_id=hero_2.id,
             hero_1_motto_id=hero_1_random_motto.id,
-            hero_2_motto_id=hero_2_random_motto.id
+            hero_2_motto_id=hero_2_random_motto.id,
+            winner=winner
         )
-        session.add()
+        session.add(new_interaction)
         session.commit()
 
 def add_story(hero_name: str, story_txt: str) -> None:
