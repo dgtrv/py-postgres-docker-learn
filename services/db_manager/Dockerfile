@@ -1,15 +1,15 @@
 FROM python:3.10.2-alpine
 
-WORKDIR /usr/src/app
+WORKDIR ${DB_MANAGER_APP_DIR}
 
 RUN apk update && apk add netcat-openbsd
 
 RUN pip install --upgrade pip
-COPY ./requirements.txt /usr/src/app/requirements.txt
+COPY ./requirements.txt ${DB_MANAGER_APP_DIR}requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . /usr/src/app/
+COPY . ${DB_MANAGER_APP_DIR}
 
-RUN chmod +x /usr/src/app/entrypoint.sh
+RUN chmod +x ${DB_MANAGER_APP_DIR}entrypoint.sh
 
-CMD ["/usr/src/app/entrypoint.sh"]
+CMD ${DB_MANAGER_APP_DIR}entrypoint.sh
