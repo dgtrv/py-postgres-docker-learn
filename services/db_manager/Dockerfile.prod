@@ -3,14 +3,13 @@
 ###########
 
 # pull official base image
-FROM python:3.10.2-slim-bullseye as builder
+FROM python:3.10.2-alpine as builder
 
 # set work directory
 WORKDIR /usr/src/app
 
 # install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc python3-dev libpq-dev
+RUN apk update && apk add gcc python3-dev libpq-dev musl-dev 
 
 # lint
 RUN pip install --upgrade pip
@@ -34,7 +33,7 @@ ARG DB_MANAGER_APP_PATH
 RUN mkdir -p ${DB_MANAGER_APP_PATH}
 
 # create the app user
-RUN addgroup --system app && adduser --system --group app
+RUN addgroup --system app && adduser -S app -G app
 
 # create the appropriate directories
 ENV APP_HOME=${DB_MANAGER_APP_PATH}

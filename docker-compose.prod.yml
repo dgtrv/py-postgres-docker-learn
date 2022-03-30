@@ -5,6 +5,7 @@ services:
     container_name: db_manager
     build:
       context: ./services/db_manager
+      dockerfile: Dockerfile.prod
       args:
         DB_MANAGER_APP_PATH: "${DB_MANAGER_APP_PATH}"
     env_file:
