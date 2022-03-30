@@ -68,6 +68,9 @@ def add_motto(hero_name: str, motto_txt: str) -> None:
 
 def add_interaction():
     log.info(f'trying to add interaction')
+    hero_1_name = ''
+    hero_2_name = ''
+    winner = randint(0, 2)
     with Session() as session:
         sides = session.query(Side).all()
         side_1 = sides[0]
@@ -76,11 +79,12 @@ def add_interaction():
         heroes_from_side_2 = session.query(Hero).filter(Hero.side_id == side_2.id).all()
         hero_1 = heroes_from_side_1[randint(0, len(heroes_from_side_1) - 1)]
         hero_2 = heroes_from_side_2[randint(0, len(heroes_from_side_2) - 1)]
+        hero_1_name = hero_1.name
+        hero_2_name = hero_2.name
         hero_1_mottos = session.query(Motto).filter(Motto.hero_id == hero_1.id).all()
         hero_1_random_motto = hero_1_mottos[randint(0, len(hero_1_mottos) - 1)]
         hero_2_mottos = session.query(Motto).filter(Motto.hero_id == hero_2.id).all()
         hero_2_random_motto = hero_2_mottos[randint(0, len(hero_2_mottos) - 1)]
-        winner = randint(0, 2)
         new_interaction = Interaction(
             hero_1_id=hero_1.id,
             hero_2_id=hero_2.id,
@@ -96,13 +100,13 @@ def add_interaction():
         case 0:
             result = 'draw'
         case 1:
-            result = f'{hero_1.name} wins!'
+            result = f'{hero_1_name} wins!'
         case 2:
-            result = f'{hero_2.name} wins!'
+            result = f'{hero_2_name} wins!'
     log_for_interactions.info(
         'the winner has been chosen, more information: ' + \
             'hero 1: %(hero_1_name)s, hero 2: %(hero_2_name)s, result: %(result)s',
-        {'hero_1_name': hero_1.name, 'hero_2_name': hero_2.name, 'result': result}
+        {'hero_1_name': hero_1_name, 'hero_2_name': hero_2_name, 'result': result}
     )
 
 def add_story(hero_name: str, story_txt: str) -> None:
