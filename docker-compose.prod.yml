@@ -3,7 +3,10 @@ version: "3.8"
 services:
   db_manager:
     container_name: db_manager
-    build: ./services/db_manager
+    build:
+      context: ./services/db_manager
+      args:
+        DB_MANAGER_APP_PATH=${DB_MANAGER_APP_PATH}
     env_file:
       - ./.env.prod
     depends_on:

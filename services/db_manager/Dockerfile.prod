@@ -28,6 +28,8 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 # pull official base image
 FROM python:3.10.2-alpine
 
+ARG DB_MANAGER_APP_PATH
+
 # create directory for the app user
 RUN mkdir -p ${DB_MANAGER_APP_PATH}
 
@@ -45,11 +47,10 @@ COPY --from=builder /usr/src/app/requirements.prod.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
 
-# copy entrypoint-prod.sh
-COPY ./entrypoint.sh $APP_HOME
-
 # copy project
 COPY . $APP_HOME
+
+RUN chmod +x ${DB_MANAGER_APP_PATH}entrypoint.sh
 
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME

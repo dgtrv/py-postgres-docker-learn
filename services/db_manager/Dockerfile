@@ -1,5 +1,7 @@
 FROM python:3.10.2-alpine
 
+ARG DB_MANAGER_APP_PATH
+
 WORKDIR ${DB_MANAGER_APP_PATH}
 
 RUN apk update && apk add netcat-openbsd
