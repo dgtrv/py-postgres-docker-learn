@@ -5,7 +5,7 @@ LOG_LEVEL = getenv('LOG_LEVEL', default='DEBUG')
 LOG_FILE = getenv('LOG_FILE', default='/usr/src/app/logs/log.txt')
 LOGS_DIR = path.dirname(LOG_FILE)
 
-makedirs(path.dirname(LOG_FILE), exist_ok=True)
+makedirs(LOGS_DIR, exist_ok=True)
 
 logging.basicConfig(
     format='%(asctime)s: %(name)-12s: %(levelname)-8s: %(message)s',
@@ -33,5 +33,8 @@ interactions_log_file_handler = logging.FileHandler(
     filename=interactions_log_file,
     mode='a'
 )
+interactions_log_formatter = logging.Formatter('%(asctime)s: %(name)-12s: %(levelname)-8s: %(message)s')
+interactions_log_file_handler.formatter = interactions_log_formatter
+interactions_log_file_handler.setLevel(logging.INFO)
 log_for_interactions.addHandler(interactions_log_file_handler)
 
