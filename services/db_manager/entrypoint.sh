@@ -13,6 +13,8 @@ fi
 
 if [ "$STAGE_ENV" = "development" ]
 then
+    echo "Cleaning up logs folder"
+    rm -rf ./logs/*
     echo "Creating the database tables..."
     python manage.py create_db
     echo "Filling tables with ini data..."
