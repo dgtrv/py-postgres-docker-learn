@@ -29,13 +29,13 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 FROM python:3.10.2-alpine
 
 # create directory for the app user
-RUN mkdir -p ${DB_MANAGER_APP_DIR}
+RUN mkdir -p ${DB_MANAGER_APP_PATH}
 
 # create the app user
 RUN addgroup --system app && adduser --system --group app
 
 # create the appropriate directories
-ENV APP_HOME=${DB_MANAGER_APP_DIR}
+ENV APP_HOME=${DB_MANAGER_APP_PATH}
 WORKDIR $APP_HOME
 
 # install dependencies
