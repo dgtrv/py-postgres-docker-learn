@@ -2,12 +2,22 @@ from datetime import datetime
 from model import Hero, Motto, Side, Interaction, Story, Base, Session, engine
 from sys import argv, exit
 from random import randint
+import logging
+from .logger import log_manage_py, log_for_interactions
+from os import getenv
+
+log = log_manage_py
+filter_for_draws_in_interactions = lambda log_record: log_record.args['result'] != 'draw'
+log_for_interactions.addFilter(filter_for_draws_in_interactions)
 
 def create_db():
+    log.info('create_db started')
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
+    log.info('create_db finished')
 
 def seed_db():
+    log.info('seed_db started')
     with Session() as session:
         session.add(Side(id=1, name='Planet Earth'))
         session.add(Side(id=2, name='Omicron Persei 8'))
@@ -30,8 +40,10 @@ def seed_db():
         session.add(Story(hero_id=1, story=''))
         session.add(Interaction(hero_1_id=4, hero_2_id=1, hero_1_motto_id=1, hero_2_motto_id=1, winner=1))
         session.commit()
+    log.info('seed_db finished')
 
 def add_hero(side_id: int, name: str, birthday: datetime, strength: int = 0) -> None:
+    log.info(f'trying to add hero with name \"{name}\"')
     hero = Hero(
         side_id=side_id,
         name=name,
@@ -41,8 +53,10 @@ def add_hero(side_id: int, name: str, birthday: datetime, strength: int = 0) -> 
     with Session() as session:
         session.add(hero)
         session.commit()
+    log.info(f'added hero with name \"{name}\"')
 
 def add_motto(hero_name: str, motto_txt: str) -> None:
+    log.info(f'trying to add motto for hero \"{hero_name}\", text: \"{motto_txt}\"')
     with Session() as session:
         hero = session.query(Hero).filter(Hero.name == hero_name).first()
         hero_mottos = session.query(Motto).filter(Motto.hero_id == hero.id).all()
@@ -50,8 +64,10 @@ def add_motto(hero_name: str, motto_txt: str) -> None:
         new_motto = Motto(hero.id, motto_id=new_motto_id, motto=motto_txt)
         session.add(new_motto)
         session.commit()
+    log.info(f'added motto for hero \"{hero_name}\", motto_id: {new_motto_id}')
 
 def add_interaction():
+    log.info(f'trying to add interaction')
     with Session() as session:
         sides = session.query(Side).all()
         side_1 = sides[0]
@@ -74,25 +90,44 @@ def add_interaction():
         )
         session.add(new_interaction)
         session.commit()
+    log.info('added new interaction')
+    result = ''
+    match winner:
+        case 0:
+            result = 'draw'
+        case 1:
+            result = f'{hero_1.name} wins!'
+        case 2:
+            result = f'{hero_2.name} wins!'
+    log_for_interactions.info(
+        'the winner has been chosen, more information: ' + \
+            'hero 1: %(hero_1_name)s, hero 2: %(hero_2_name)s, result: %(result)s',
+        {'hero_1_name': hero_1.name, 'hero_2_name': hero_2.name, 'result': result}
+    )
 
 def add_story(hero_name: str, story_txt: str) -> None:
+    log.info(f'trying to add story for hero \"{hero_name}\", text: \"{story_txt}\"')
     with Session() as session:
         hero = session.query(Hero).filter(Hero.name == hero_name).first()
         hero_story = session.query(Story).filter(Story.hero_id == hero.id).first()
         if not hero_story:
+            log.info(f'hero {hero_name} doesn\'t have a story now, adding new')
             hero_story = Story(hero_id=hero.id, story=story_txt)
             session.add(hero_story)
         hero_story.story = story_txt
         session.commit()
+        log.info(f'added story for hero \"{hero_name}\", story_id: {hero_story.id}')
 
 def del_hero(hero_name: str) -> None:
+    log.info(f'trying to remove hero \"{hero_name}\"')
     with Session() as session:
         hero = session.query(Hero).filter(Hero.name == hero_name).first()
         session.delete(hero)
         session.commit()
+    log.info(f'removed hero \"{hero_name}\", hero_id was: {hero.id}')
 
 if len(argv) < 2:
-    print('No command provided')
+    log.error('No command provided')
     exit(0)
 
 match argv[1]:
@@ -102,7 +137,7 @@ match argv[1]:
         seed_db()
     case 'add_hero':
         if len(argv) < 4:
-            print('Not enough aruments provided')
+            log.error('Not enough aruments provided')
             exit()
         hero_name = argv[3]
         hero_side_id = int(argv[4])
@@ -121,7 +156,7 @@ match argv[1]:
         )
     case 'add_motto':
         if len(argv) < 4:
-            print('Not enough aruments provided')
+            log.error('Not enough aruments provided')
             exit()
         hero_name = argv[3]
         motto_txt = argv[4]
@@ -133,7 +168,7 @@ match argv[1]:
         add_interaction()
     case 'add_story':
         if len(argv) < 4:
-            print('Not enough aruments provided')
+            log.error('Not enough aruments provided')
             exit()
         hero_name = argv[3]
         story_txt = argv[4]
@@ -143,10 +178,10 @@ match argv[1]:
         )
     case 'del_hero':
         if len(argv) < 3:
-            print('Not enough aruments provided')
+            log.error('Not enough aruments provided')
             exit()
         hero_name = argv[3]
         del_hero(hero_name=hero_name)
     case _:
-        print('Command not recognized')
+        log.error('Command not recognized')
         exit()

@@ -8,6 +8,8 @@ services:
       - ./.env.dev
     depends_on:
       - db
+    volumes:
+      - db_manager_logs:/usr/app/src/logs/
   db:
     container_name: postgres
     image: postgres:14.2-alpine
