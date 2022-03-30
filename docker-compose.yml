@@ -6,7 +6,7 @@ services:
     build:
       context: ./services/db_manager
       args:
-        DB_MANAGER_APP_PATH=${DB_MANAGER_APP_PATH}
+        DB_MANAGER_APP_PATH: "${DB_MANAGER_APP_PATH}"
     env_file:
       - ./.env.dev
     depends_on:
