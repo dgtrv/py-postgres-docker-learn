@@ -9,7 +9,15 @@ from .model import Base, Hero, Side, Story, Motto, Interaction
 log = log_model_init
 
 log.info('trying to create db engine')
-engine = create_engine('postgresql://dgtrv:dgtrv@db:5432/heroes_db')
+
+db_user = getenv('POSTGRES_USER')
+db_password = getenv('POSTGRES_PASSWORD')
+db_name = getenv('POSTGRES_DB')
+sql_host = getenv('SQL_HOST')
+sql_port = getenv('SQL_PORT')
+
+engine = create_engine(f'postgresql://{db_user}:{db_password}@{sql_host}:{sql_port}/{db_name}')
+
 log.info('engine created')
 
 log.info('trying to create session with engine')
