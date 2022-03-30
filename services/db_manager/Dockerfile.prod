@@ -9,7 +9,7 @@ FROM python:3.10.2-alpine as builder
 WORKDIR /usr/src/app
 
 # install system dependencies
-RUN apk update && apk add gcc python3-dev libpq-dev musl-dev 
+RUN apk update && apk add gcc python3-dev libpq-dev=14.2-r0 musl-dev 
 
 # lint
 RUN pip install --upgrade pip
@@ -40,7 +40,7 @@ ENV APP_HOME=${DB_MANAGER_APP_PATH}
 WORKDIR $APP_HOME
 
 # install dependencies
-RUN apk update && apk add netcat-openbsd
+RUN apk update && apk add netcat-openbsd libpq=14.2-r0
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.prod.txt .
 RUN pip install --upgrade pip
@@ -53,6 +53,8 @@ RUN chmod +x ${DB_MANAGER_APP_PATH}entrypoint.sh
 
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME
+
+#RUN mkdir -p ${APP_HOME}logs && chown app:app ${APP_HOME}logs
 
 # change to the app user
 USER app
