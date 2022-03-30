@@ -1,7 +1,7 @@
 from asyncio.log import logger
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from logger import log_model_init
+from logger.common_log import log_model_init
 from os import getenv
 
 from .model import Base, Hero, Side, Story, Motto, Interaction
