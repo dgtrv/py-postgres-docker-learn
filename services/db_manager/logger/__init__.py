@@ -1,9 +1,11 @@
-from os import getenv, path
+from os import getenv, path, makedirs
 import logging
 
 LOG_LEVEL = getenv('LOG_LEVEL', default='DEBUG')
 LOG_FILE = getenv('LOG_FILE', default='/usr/src/app/logs/log.txt')
 LOGS_DIR = path.dirname(LOG_FILE)
+
+makedirs(path.dirname(LOG_FILE), exist_ok=True)
 
 logging.basicConfig(
     format='%(asctime)s: %(name)-12s: %(levelname)-8s: %(message)s',

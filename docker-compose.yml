@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     volumes:
-      - db_manager_logs:/usr/app/src/logs/
+      - ./logs:/usr/src/app/logs/
   db:
     container_name: postgres
     image: postgres:14.2-alpine
