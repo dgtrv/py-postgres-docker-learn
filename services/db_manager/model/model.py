@@ -20,7 +20,7 @@ class Hero(Base):
     birthday = Column(DateTime(timezone=True))
     strength = Column(Integer)
     mottos = relationship('Motto', back_populates='hero', cascade='all, delete')
-    story = relationship('Story', back_populates='hero', uselist=False)
+    story = relationship('Story', back_populates='hero', uselist=False, cascade='all, delete')
     interaction_as_hero_1 = relationship(
         'Interaction',
         backref='hero_1',
@@ -120,12 +120,12 @@ class Interaction(Base):
         result.append(f'Interaction started (interaction id: {self.id}):\n')
         if self.hero_1:
             result.append(f'  In the left corner (first hero): {self.hero_1.name}'\
-                 + f'\n  with motto: {self.hero_1_motto.motto}\n')
+                 + f'\n    with motto: {self.hero_1_motto.motto}\n')
         else:
             result.append('  First hero is no more\n')
         if self.hero_2:
             result.append(f'  In the right corner (second hero): {self.hero_2.name}'\
-                + f'\n  with motto: {self.hero_2_motto.motto}\n')
+                + f'\n    with motto: {self.hero_2_motto.motto}\n')
         else:
             result.append('  Second hero is no more\n')
         result.append('  Result: \n')
@@ -147,7 +147,7 @@ class Story(Base):
 
     id = Column(Integer, primary_key=True)
     hero_id = Column(Integer, ForeignKey('heroes.id'), nullable=False)
-    hero = relationship('Hero', back_populates='story')
+    hero = relationship('Hero', back_populates='story', passive_deletes=True)
     story = Column(String(500), nullable=False)
 
 # НЕОБЯЗАТЕЛЬНО: вьюшка со статистиками: measure, value. Строки для measure, строгая очерёдность: всего героев, героев стороны А, героев стороны Б, всего сражений, победителей со стороны А, победителей со стороны Б, всего слоганов, слоганов героев А, слоганов героев Б.
