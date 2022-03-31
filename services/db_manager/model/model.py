@@ -51,14 +51,14 @@ class Hero(Base):
         result.append('  Interactions as first hero:\n')
         if len(self.interaction_as_hero_1) > 0:
             for interaction in self.interaction_as_hero_1:
-                result.append(''.join('    ', str(interaction)))
+                result.append('    '.join(str(interaction)))
         else:
             result.append('    No interactions available\n')
 
         result.append('  Interactions as second hero:\n')
         if len(self.interaction_as_hero_2) > 0:
             for interaction in self.interaction_as_hero_2:
-                result.append(''.join('    ', str(interaction)))
+                result.append('    '.join(str(interaction)))
         else:
             result.append('    No interactions available\n')
 
