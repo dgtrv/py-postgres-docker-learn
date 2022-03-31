@@ -1,0 +1,17 @@
+                                 Table "public.interactions"
+     Column      |  Type   | Collation | Nullable |                 Default                  
+-----------------+---------+-----------+----------+------------------------------------------
+ id              | integer |           | not null | nextval('interactions_id_seq'::regclass)
+ hero_1_id       | integer |           |          | 
+ hero_1_motto_id | integer |           |          | 
+ hero_2_id       | integer |           |          | 
+ hero_2_motto_id | integer |           |          | 
+ winner          | integer |           |          | 
+Indexes:
+    "interactions_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "interactions_hero_1_id_fkey" FOREIGN KEY (hero_1_id) REFERENCES heroes(id) ON DELETE SET NULL
+    "interactions_hero_1_motto_id_fkey" FOREIGN KEY (hero_1_motto_id) REFERENCES mottos(id) ON DELETE SET NULL
+    "interactions_hero_2_id_fkey" FOREIGN KEY (hero_2_id) REFERENCES heroes(id) ON DELETE SET NULL
+    "interactions_hero_2_motto_id_fkey" FOREIGN KEY (hero_2_motto_id) REFERENCES mottos(id) ON DELETE SET NULL
+

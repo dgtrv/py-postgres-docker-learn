@@ -1,0 +1,15 @@
+                                     Table "public.mottos"
+  Column  |          Type          | Collation | Nullable |              Default               
+----------+------------------------+-----------+----------+------------------------------------
+ id       | integer                |           | not null | nextval('mottos_id_seq'::regclass)
+ hero_id  | integer                |           |          | 
+ motto_id | integer                |           |          | 
+ motto    | character varying(500) |           | not null | 
+Indexes:
+    "mottos_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "mottos_hero_id_fkey" FOREIGN KEY (hero_id) REFERENCES heroes(id)
+Referenced by:
+    TABLE "interactions" CONSTRAINT "interactions_hero_1_motto_id_fkey" FOREIGN KEY (hero_1_motto_id) REFERENCES mottos(id) ON DELETE SET NULL
+    TABLE "interactions" CONSTRAINT "interactions_hero_2_motto_id_fkey" FOREIGN KEY (hero_2_motto_id) REFERENCES mottos(id) ON DELETE SET NULL
+

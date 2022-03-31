@@ -1,0 +1,10 @@
+                                   Table "public.sides"
+ Column |         Type          | Collation | Nullable |              Default              
+--------+-----------------------+-----------+----------+-----------------------------------
+ id     | integer               |           | not null | nextval('sides_id_seq'::regclass)
+ name   | character varying(30) |           | not null | 
+Indexes:
+    "sides_pkey" PRIMARY KEY, btree (id)
+Referenced by:
+    TABLE "heroes" CONSTRAINT "heroes_side_id_fkey" FOREIGN KEY (side_id) REFERENCES sides(id)
+
