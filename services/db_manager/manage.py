@@ -170,7 +170,7 @@ def print_mottos(hero_name: str) -> None:
                 return
             print(f'Mottos for hero \"{hero.name}\":')
             for motto in hero.mottos:
-                print(str(motto))
+                print(str(motto.motto))
             log.info(f'printed mottos for hero \"{hero_name}\", hero_id was: {hero.id}')       
 
 if len(argv) < 2:
