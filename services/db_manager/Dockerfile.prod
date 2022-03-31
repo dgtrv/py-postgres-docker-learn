@@ -54,7 +54,7 @@ RUN chmod +x ${DB_MANAGER_APP_PATH}entrypoint.sh
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME
 
-#RUN mkdir -p ${APP_HOME}logs && chown app:app ${APP_HOME}logs
+RUN mkdir -p ${APP_HOME}logs && chown app:app ${APP_HOME}logs
 
 # change to the app user
 USER app
