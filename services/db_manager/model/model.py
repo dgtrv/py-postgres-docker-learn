@@ -137,9 +137,9 @@ class Interaction(Base):
             case 0:
                 result.append('    draw\n')
             case 1:
-                result.append(f'    {self.hero_1_name} won!\n')
+                result.append(f'    {hero_1_name} won!\n')
             case 2:
-                result.append(f'    {self.hero_2_name} won!\n')
+                result.append(f'    {hero_2_name} won!\n')
         
         return ''.join(result)
 
