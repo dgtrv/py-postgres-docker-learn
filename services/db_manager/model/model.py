@@ -34,32 +34,35 @@ class Hero(Base):
         return f'{self.id} | {self.name} | {self.side.name}'
 
     def __str__(self):
-        print(f'Info for hero named \"{self.name}\" (id = {self.id}) from {self.side.name}:')
-        print(f'Birthday: {self.birthday}')
-        print(f'Strength: {self.strength}')
-        print(f'Mottos:')
+        result = []
+        result.add(f'Info for hero named \"{self.name}\" (id = {self.id}) from {self.side.name}:\n')
+        result.add(f'Birthday: {self.birthday}\n')
+        result.add(f'Strength: {self.strength}\n')
+        result.add(f'Mottos:\n')
         
         if len(self.mottos) > 0:
             for motto in self.mottos:
-                print(f'(Motto with id {motto.motto_id}: {motto.motto}')
+                result.add(f'(Motto with id {motto.motto_id}: {motto.motto}\n')
         else:
-            print('No mottos available')
+            result.add('No mottos available\n')
         
-        print(f'Story: {self.story.story}')
+        result.add(f'Story: {self.story.story}\n')
 
-        print('Interactions as first hero:')
+        result.add('Interactions as first hero:\n')
         if len(self.interaction_as_hero_1) > 0:
             for interaction in self.interaction_as_hero_1:
-                print(interaction)
+                result.add(interaction)
         else:
-            print('No interactions available')
+            result.add('No interactions available\n')
 
-        print('Interactions as second hero:')
+        result.add('Interactions as second hero:\n')
         if len(self.interaction_as_hero_2) > 0:
             for interaction in self.interaction_as_hero_2:
-                print(interaction)
+                result.add(interaction)
         else:
-            print('No interactions available')
+            result.add('No interactions available\n')
+
+        return ''.join(result)
 
 
 # Sides
@@ -113,25 +116,28 @@ class Interaction(Base):
         return f'{self.id} | {self.hero_1_id} | {self.hero_1.name} | {motto_1} | {self.hero_2_id} | {self.hero_2.name} | { motto_2} | {self.winner}'
 
     def __str__(self):
-        print('Interaction started:')
+        result = []
+        result.add('Interaction started:\n')
         if self.hero_1:
-            print(f'In the left corner (first hero): {self.hero_1.name}'\
-                 + f'\n with motto: {self.hero_1_motto.motto}')
+            result.add(f'In the left corner (first hero): {self.hero_1.name}'\
+                 + f'\n with motto: {self.hero_1_motto.motto}\n')
         else:
-            print('First hero is no more')
+            result.add('First hero is no more\n')
         if self.hero_2:
-            print(f'In the right corner (second hero): {self.hero_2.name}'\
-                + f'\n with motto: {self.hero_2_motto.motto}')
+            result.add(f'In the right corner (second hero): {self.hero_2.name}'\
+                + f'\n with motto: {self.hero_2_motto.motto}\n')
         else:
-            print('Second hero is no more')
-        print('Result: ')
+            result.add('Second hero is no more\n')
+        result.add('Result: \n')
         match self.winner:
             case 0:
-                print('draw')
+                result.add('draw\n')
             case 1:
-                print(f'{self.hero_1.name} won!')
+                result.add(f'{self.hero_1.name} won!\n')
             case 2:
-                print(f'{self.hero_2.name} won!')
+                result.add(f'{self.hero_2.name} won!\n')
+        
+        return ''.join(result)
 
 
 # Краткая предыстория героя без спойлеров: id, hero_id, story. Где 1 герой = строго 1 история.
