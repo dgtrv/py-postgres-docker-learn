@@ -186,15 +186,15 @@ match argv[1]:
         if len(argv) < 4:
             log.error('Not enough aruments provided')
             exit()
-        hero_name = argv[3]
-        hero_side_id = int(argv[4])
+        hero_name = argv[2]
+        hero_side_id = int(argv[3])
         hero_birthday = None
         hero_strength = None
         if len(argv) > 4:
-            year, month, day = argv[5].split('.')
+            year, month, day = argv[4].split('.')
             hero_birthday = datetime(year, month, day)
         if len(argv) > 5:
-            hero_strength = int(argv[6])
+            hero_strength = int(argv[5])
         add_hero(
             name=hero_name,
             side_id=hero_side_id,
@@ -205,8 +205,8 @@ match argv[1]:
         if len(argv) < 4:
             log.error('Not enough aruments provided')
             exit()
-        hero_name = argv[3]
-        motto_txt = argv[4]
+        hero_name = argv[2]
+        motto_txt = argv[3]
         add_motto(
             hero_name=hero_name,
             motto_txt=motto_txt
@@ -217,8 +217,8 @@ match argv[1]:
         if len(argv) < 4:
             log.error('Not enough aruments provided')
             exit()
-        hero_name = argv[3]
-        story_txt = argv[4]
+        hero_name = argv[2]
+        story_txt = argv[3]
         add_story(
             hero_name=hero_name,
             story_txt=story_txt
@@ -227,19 +227,18 @@ match argv[1]:
         if len(argv) < 3:
             log.error('Not enough aruments provided')
             exit()
-        hero_name = argv[3]
+        hero_name = argv[2]
         del_hero(hero_name=hero_name)
     case 'print_hero':
         hero_name = ''
         if len(argv) > 2:
-            hero_name = argv[3]
+            hero_name = argv[2]
         print_hero(hero_name=hero_name)
     case 'print_mottos':
         hero_name = ''
         if len(argv) > 2:
             hero_name = argv[2]
         print_mottos(hero_name=hero_name)
-        print_motto(hero_name=hero_name)
     case _:
         log.error('Command not recognized')
         exit()
