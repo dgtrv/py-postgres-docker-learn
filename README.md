@@ -61,7 +61,7 @@ To view log files:
 ./logs_prod.sh
 ```
 
-DB tables description:
+DB tables description are also in txt files in project root folder:
 
                                       Table "public.heroes"
   Column  |           Type           | Collation | Nullable |              Default               
