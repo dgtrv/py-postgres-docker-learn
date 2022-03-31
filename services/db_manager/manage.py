@@ -131,6 +131,24 @@ def del_hero(hero_name: str) -> None:
         session.commit()
     log.info(f'removed hero \"{hero_name}\", hero_id was: {hero.id}')
 
+def print_hero(hero_name: str) -> None:
+    log.info(f'trying to print hero \"{hero_name}\"')
+    with Session() as session:
+        if hero_name == '':
+            heroes = session.query(Hero).all()
+            if len(heroes) == 0:
+                log.error('No heroes available')
+                return
+            for hero in heroes:
+                print(str(hero))
+        else:
+            hero = session.query(Hero).filter(Hero.name == hero_name).first()
+            if not hero:
+                log.error(f'Hero with name \"{hero_name}\" not found!')
+                return
+            print(str(hero))
+        log.info(f'printed hero \"{hero_name}\", hero_id was: {hero.id}')
+
 if len(argv) < 2:
     log.error('No command provided')
     exit(0)
@@ -187,6 +205,11 @@ match argv[1]:
             exit()
         hero_name = argv[3]
         del_hero(hero_name=hero_name)
+    case 'print_hero':
+        hero_name = ''
+        if len(argv) > 2:
+            hero_name = argv[3]
+        print_hero(hero_name=hero_name)
     case _:
         log.error('Command not recognized')
         exit()
