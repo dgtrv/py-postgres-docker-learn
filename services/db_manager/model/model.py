@@ -117,13 +117,17 @@ class Interaction(Base):
 
     def __str__(self):
         result = []
+        hero_1_name = 'unknown'
+        hero_2_name = 'unknown'
         result.append(f'Interaction started (interaction id: {self.id}):\n')
         if self.hero_1:
+            hero_1_name = self.hero_1.name
             result.append(f'  In the left corner (first hero): {self.hero_1.name}'\
                  + f'\n    with motto: {self.hero_1_motto.motto}\n')
         else:
             result.append('  First hero is no more\n')
         if self.hero_2:
+            hero_2_name = self.hero_2.name
             result.append(f'  In the right corner (second hero): {self.hero_2.name}'\
                 + f'\n    with motto: {self.hero_2_motto.motto}\n')
         else:
@@ -133,9 +137,9 @@ class Interaction(Base):
             case 0:
                 result.append('    draw\n')
             case 1:
-                result.append(f'    {self.hero_1.name} won!\n')
+                result.append(f'    {self.hero_1_name} won!\n')
             case 2:
-                result.append(f'    {self.hero_2.name} won!\n')
+                result.append(f'    {self.hero_2_name} won!\n')
         
         return ''.join(result)
 
