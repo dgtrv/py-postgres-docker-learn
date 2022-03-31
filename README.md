@@ -1,4 +1,4 @@
-# py-postgre-docker-learn
+# py-postgres-docker-learn
 Learning project for python, docker, postgresql, logging
 ### development: docker
 To deploy - from the root folder:
