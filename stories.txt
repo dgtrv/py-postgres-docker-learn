@@ -1,0 +1,11 @@
+                                    Table "public.stories"
+ Column  |          Type          | Collation | Nullable |               Default               
+---------+------------------------+-----------+----------+-------------------------------------
+ id      | integer                |           | not null | nextval('stories_id_seq'::regclass)
+ hero_id | integer                |           | not null | 
+ story   | character varying(500) |           | not null | 
+Indexes:
+    "stories_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "stories_hero_id_fkey" FOREIGN KEY (hero_id) REFERENCES heroes(id)
+
