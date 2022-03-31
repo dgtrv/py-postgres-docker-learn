@@ -32,14 +32,19 @@ def seed_db():
         session.add(Motto(hero_id=1, motto_id=2, motto='Ray-blocking power!'))
         session.add(Motto(hero_id=2, motto_id=1, motto='You gotta do what you gotta do'))
         session.add(Motto(hero_id=3, motto_id=1, motto='Bite my shiny metall ass!'))
-        session.add(Motto(hero_id=3, motto_id=1, motto='Yeah, well, I\'m going to go build my own theme park with blackjack and hookers. In fact, forget the park.'))
+        session.add(Motto(hero_id=3, motto_id=2, motto='Kill all humans!'))
+        session.add(Motto(hero_id=3, motto_id=3, motto='Yeah, well, I\'m going to go build my own theme park with blackjack and hookers. In fact, forget the park.'))
         session.add(Motto(hero_id=4, motto_id=1, motto='I am Lrrr, ruler of the planet Omicron Persei 8. You are hereby conquered!'))
         session.add(Motto(hero_id=4, motto_id=2, motto='I am Lrrr, ruler of the planet Omicron Persei 8. May I crash on your couch?'))
         session.add(Motto(hero_id=5, motto_id=1, motto='I demand the ancient ritual of Rrrmrrrmrrrfrrrmrrr or Consequences!'))
         session.add(Motto(hero_id=5, motto_id=2, motto='I am the boss of you!'))
         session.add(Motto(hero_id=6, motto_id=1, motto='Don\'t worry, I won\'t hurt you.'))
-        session.add(Story(hero_id=1, story=''))
-        session.add(Interaction(hero_1_id=4, hero_2_id=1, hero_1_motto_id=1, hero_2_motto_id=1, winner=1))
+        session.add(Story(hero_id=1, story='Delivery boy from 20th century'))
+        session.add(Story(hero_id=2, story='One-eyed girl'))
+        session.add(Story(hero_id=3, story='Spanish singer'))
+        session.add(Story(hero_id=4, story='Ruler of the planet Omicron Persei 8'))
+        session.add(Story(hero_id=5, story='Wife of the ruler of the planet Omicron Persei 8'))
+        session.add(Story(hero_id=6, story='Son of the ruler of the planet Omicron Persei 8'))
         session.commit()
     log.info('seed_db finished')
 
@@ -131,6 +136,48 @@ def del_hero(hero_name: str) -> None:
         session.commit()
     log.info(f'removed hero \"{hero_name}\", hero_id was: {hero.id}')
 
+def print_hero(hero_name: str) -> None:
+    log.info(f'trying to print hero \"{hero_name}\"')
+    with Session() as session:
+        if hero_name == '':
+            heroes = session.query(Hero).all()
+            if len(heroes) == 0:
+                log.error('No heroes available')
+                return
+            for hero in heroes:
+                print(str(hero))
+            log.info(f'printed all available heroes')
+        else:
+            hero = session.query(Hero).filter(Hero.name == hero_name).first()
+            if not hero:
+                log.error(f'Hero with name \"{hero_name}\" not found!')
+                return
+            print(str(hero))
+            log.info(f'printed hero \"{hero_name}\", hero_id was: {hero.id}')
+
+def print_mottos(hero_name: str) -> None:
+    log.info(f'trying to print mottos for hero \"{hero_name}\"')
+    with Session() as session:
+        if hero_name == '':
+            heroes = session.query(Hero).all()
+            if len(heroes) == 0:
+                log.error('No heroes available')
+                return
+            for hero in heroes:
+                print(f'Mottos for hero \"{hero.name}\":')
+                for motto in hero.mottos:
+                    print(str(motto))
+            log.info(f'printed mottos for all available heroes')
+        else:
+            hero = session.query(Hero).filter(Hero.name == hero_name).first()
+            if not hero:
+                log.error(f'Hero with name \"{hero_name}\" not found!')
+                return
+            print(f'Mottos for hero \"{hero.name}\":')
+            for motto in hero.mottos:
+                print(str(motto.motto))
+            log.info(f'printed mottos for hero \"{hero_name}\", hero_id was: {hero.id}')       
+
 if len(argv) < 2:
     log.error('No command provided')
     exit(0)
@@ -144,15 +191,15 @@ match argv[1]:
         if len(argv) < 4:
             log.error('Not enough aruments provided')
             exit()
-        hero_name = argv[3]
-        hero_side_id = int(argv[4])
+        hero_name = argv[2]
+        hero_side_id = int(argv[3])
         hero_birthday = None
         hero_strength = None
         if len(argv) > 4:
-            year, month, day = argv[5].split('.')
+            year, month, day = argv[4].split('.')
             hero_birthday = datetime(year, month, day)
         if len(argv) > 5:
-            hero_strength = int(argv[6])
+            hero_strength = int(argv[5])
         add_hero(
             name=hero_name,
             side_id=hero_side_id,
@@ -163,8 +210,8 @@ match argv[1]:
         if len(argv) < 4:
             log.error('Not enough aruments provided')
             exit()
-        hero_name = argv[3]
-        motto_txt = argv[4]
+        hero_name = argv[2]
+        motto_txt = argv[3]
         add_motto(
             hero_name=hero_name,
             motto_txt=motto_txt
@@ -175,8 +222,8 @@ match argv[1]:
         if len(argv) < 4:
             log.error('Not enough aruments provided')
             exit()
-        hero_name = argv[3]
-        story_txt = argv[4]
+        hero_name = argv[2]
+        story_txt = argv[3]
         add_story(
             hero_name=hero_name,
             story_txt=story_txt
@@ -185,8 +232,18 @@ match argv[1]:
         if len(argv) < 3:
             log.error('Not enough aruments provided')
             exit()
-        hero_name = argv[3]
+        hero_name = argv[2]
         del_hero(hero_name=hero_name)
+    case 'print_hero':
+        hero_name = ''
+        if len(argv) > 2:
+            hero_name = argv[2]
+        print_hero(hero_name=hero_name)
+    case 'print_mottos':
+        hero_name = ''
+        if len(argv) > 2:
+            hero_name = argv[2]
+        print_mottos(hero_name=hero_name)
     case _:
         log.error('Command not recognized')
         exit()

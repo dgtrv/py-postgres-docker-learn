@@ -20,7 +20,7 @@ class Hero(Base):
     birthday = Column(DateTime(timezone=True))
     strength = Column(Integer)
     mottos = relationship('Motto', back_populates='hero', cascade='all, delete')
-    story = relationship('Story', back_populates='hero', uselist=False)
+    story = relationship('Story', back_populates='hero', uselist=False, cascade='all, delete')
     interaction_as_hero_1 = relationship(
         'Interaction',
         backref='hero_1',
@@ -32,6 +32,37 @@ class Hero(Base):
     
     def __repr__(self):
         return f'{self.id} | {self.name} | {self.side.name}'
+
+    def __str__(self):
+        result = []
+        result.append(f'Info for hero named \"{self.name}\" (id = {self.id}) from {self.side.name}:\n')
+        result.append(f'  Birthday: {self.birthday}\n')
+        result.append(f'  Strength: {self.strength}\n')
+        result.append(f'  Mottos:\n')
+        
+        if len(self.mottos) > 0:
+            for motto in self.mottos:
+                result.append(f'    Motto with id {motto.motto_id}: {motto.motto}\n')
+        else:
+            result.append('    No mottos available\n')
+        
+        result.append(f'  Story: {self.story.story}\n')
+
+        result.append('  Interactions as first hero:\n')
+        if len(self.interaction_as_hero_1) > 0:
+            for interaction in self.interaction_as_hero_1:
+                result.append('    ' + str(interaction))
+        else:
+            result.append('    No interactions available\n')
+
+        result.append('  Interactions as second hero:\n')
+        if len(self.interaction_as_hero_2) > 0:
+            for interaction in self.interaction_as_hero_2:
+                result.append('    ' + str(interaction))
+        else:
+            result.append('    No interactions available\n')
+
+        return ''.join(result)
 
 
 # Sides
@@ -84,6 +115,30 @@ class Interaction(Base):
         motto_2 = self.hero_2_motto.motto if self.hero_2_motto else ''
         return f'{self.id} | {self.hero_1_id} | {self.hero_1.name} | {motto_1} | {self.hero_2_id} | {self.hero_2.name} | { motto_2} | {self.winner}'
 
+    def __str__(self):
+        result = []
+        result.append(f'Interaction started (interaction id: {self.id}):\n')
+        if self.hero_1:
+            result.append(f'  In the left corner (first hero): {self.hero_1.name}'\
+                 + f'\n    with motto: {self.hero_1_motto.motto}\n')
+        else:
+            result.append('  First hero is no more\n')
+        if self.hero_2:
+            result.append(f'  In the right corner (second hero): {self.hero_2.name}'\
+                + f'\n    with motto: {self.hero_2_motto.motto}\n')
+        else:
+            result.append('  Second hero is no more\n')
+        result.append('  Result: \n')
+        match self.winner:
+            case 0:
+                result.append('    draw\n')
+            case 1:
+                result.append(f'    {self.hero_1.name} won!\n')
+            case 2:
+                result.append(f'    {self.hero_2.name} won!\n')
+        
+        return ''.join(result)
+
 
 # Краткая предыстория героя без спойлеров: id, hero_id, story. Где 1 герой = строго 1 история.
 class Story(Base):
@@ -92,7 +147,7 @@ class Story(Base):
 
     id = Column(Integer, primary_key=True)
     hero_id = Column(Integer, ForeignKey('heroes.id'), nullable=False)
-    hero = relationship('Hero', back_populates='story')
+    hero = relationship('Hero', back_populates='story', passive_deletes=True)
     story = Column(String(500), nullable=False)
 
 # НЕОБЯЗАТЕЛЬНО: вьюшка со статистиками: measure, value. Строки для measure, строгая очерёдность: всего героев, героев стороны А, героев стороны Б, всего сражений, победителей со стороны А, победителей со стороны Б, всего слоганов, слоганов героев А, слоганов героев Б.
