@@ -36,31 +36,31 @@ class Hero(Base):
     def __str__(self):
         result = []
         result.append(f'Info for hero named \"{self.name}\" (id = {self.id}) from {self.side.name}:\n')
-        result.append(f'Birthday: {self.birthday}\n')
-        result.append(f'Strength: {self.strength}\n')
-        result.append(f'Mottos:\n')
+        result.append(f'  Birthday: {self.birthday}\n')
+        result.append(f'  Strength: {self.strength}\n')
+        result.append(f'  Mottos:\n')
         
         if len(self.mottos) > 0:
             for motto in self.mottos:
-                result.append(f'(Motto with id {motto.motto_id}: {motto.motto}\n')
+                result.append(f'    Motto with id {motto.motto_id}: {motto.motto}\n')
         else:
-            result.append('No mottos available\n')
+            result.append('    No mottos available\n')
         
-        result.append(f'Story: {self.story.story}\n')
+        result.append(f'  Story: {self.story.story}\n')
 
-        result.append('Interactions as first hero:\n')
+        result.append('  Interactions as first hero:\n')
         if len(self.interaction_as_hero_1) > 0:
             for interaction in self.interaction_as_hero_1:
-                result.append(str(interaction))
+                result.append(''.join('    ', str(interaction)))
         else:
-            result.append('No interactions available\n')
+            result.append('    No interactions available\n')
 
-        result.append('Interactions as second hero:\n')
+        result.append('  Interactions as second hero:\n')
         if len(self.interaction_as_hero_2) > 0:
             for interaction in self.interaction_as_hero_2:
-                result.append(str(interaction))
+                result.append(''.join('    ', str(interaction)))
         else:
-            result.append('No interactions available\n')
+            result.append('    No interactions available\n')
 
         return ''.join(result)
 
@@ -117,25 +117,25 @@ class Interaction(Base):
 
     def __str__(self):
         result = []
-        result.append('Interaction started:\n')
+        result.append(f'Interaction started (interaction id: {self.id}):\n')
         if self.hero_1:
-            result.append(f'In the left corner (first hero): {self.hero_1.name}'\
-                 + f'\n with motto: {self.hero_1_motto.motto}\n')
+            result.append(f'  In the left corner (first hero): {self.hero_1.name}'\
+                 + f'\n  with motto: {self.hero_1_motto.motto}\n')
         else:
-            result.append('First hero is no more\n')
+            result.append('  First hero is no more\n')
         if self.hero_2:
-            result.append(f'In the right corner (second hero): {self.hero_2.name}'\
-                + f'\n with motto: {self.hero_2_motto.motto}\n')
+            result.append(f'  In the right corner (second hero): {self.hero_2.name}'\
+                + f'\n  with motto: {self.hero_2_motto.motto}\n')
         else:
-            result.append('Second hero is no more\n')
-        result.append('Result: \n')
+            result.append('  Second hero is no more\n')
+        result.append('  Result: \n')
         match self.winner:
             case 0:
-                result.append('draw\n')
+                result.append('    draw\n')
             case 1:
-                result.append(f'{self.hero_1.name} won!\n')
+                result.append(f'    {self.hero_1.name} won!\n')
             case 2:
-                result.append(f'{self.hero_2.name} won!\n')
+                result.append(f'    {self.hero_2.name} won!\n')
         
         return ''.join(result)
 
