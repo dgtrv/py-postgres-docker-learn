@@ -1,5 +1,8 @@
 # py-postgres-docker-learn
 Learning project for python, docker, postgresql, logging
+
+All work done after the deadline is in "after_deadline" branch.
+
 ### development: docker
 To deploy - from the root folder:
 ```Linux Kernel Module
