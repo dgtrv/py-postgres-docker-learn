@@ -14,6 +14,9 @@ services:
       - db
     volumes:
       - "db_manager_logs:${DB_MANAGER_APP_PATH}${DB_MANAGER_APP_LOGS_DIR}/"
+    environment:
+      - "TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN"
+      - "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID"
   db:
     container_name: postgres
     image: postgres:14.2-alpine
