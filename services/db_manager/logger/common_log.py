@@ -2,6 +2,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from logger import LOG_LEVEL, LOG_FILE
 
+
 logging.basicConfig(
     format='%(asctime)s: %(name)-12s: %(levelname)-8s: %(message)s',
     datefmt='%Y.%m.%d %H:%M:%S',
