@@ -3,6 +3,7 @@ from os import path
 from logger import LOGS_DIR
 from logger.telegram import telegram_handler, TELEGRAM_BOT_TOKEN
 
+
 log_for_interactions = logging.getLogger('interactions')
 
 interactions_log_file = path.join(LOGS_DIR, 'interactions_log.txt')

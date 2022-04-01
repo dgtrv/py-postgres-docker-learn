@@ -2,10 +2,9 @@ from datetime import datetime
 from model import Hero, Motto, Side, Interaction, Story, Base, Session, engine
 from sys import argv, exit
 from random import randint
-import logging
 from logger.common_log import log_manage_py
 from logger.interactions_log import log_for_interactions
-from os import getenv
+
 
 log = log_manage_py
 filter_for_draws_in_interactions = lambda log_record: log_record.args['result'] != 'draw'
