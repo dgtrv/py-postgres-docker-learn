@@ -1,7 +1,6 @@
 from logging import LogRecord
 from logging.handlers import HTTPHandler
 from os import getenv
-from logger.interactions_log import log_for_interactions
 import logging
 
 
@@ -33,4 +32,3 @@ telegram_handler = TelegramLoggingHandler(
 
 telegram_handler.setLevel(logging.INFO)
 
-log_for_interactions.addHandler(telegram_handler)
